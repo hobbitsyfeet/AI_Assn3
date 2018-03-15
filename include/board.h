@@ -14,21 +14,24 @@
 	2|     |     |     |
 	1| 0,0 | 0,1 | 0,2 |
 	0|_ _ _|_ _ _|_ _ _|
-		0 1 2 3 4 5 6 7 8 x
+      0 1 2 3 4 5 6 7 8 x
+
+NOTE: numbers in sub squares are the values
+that are used to access them in searchSub()
+This creates a nice 3*index to get to 0,0 of sub square (bottom left)
 */
 
 class board{
 public:
 
 	board();
-	void searchSub(int x, int y); //searches sub-squares
-	void searchCol(int x); //searches column at given x
-	void searchRow(int y); //searches row at given y
+	void setValue(int x, int y, int value); //places value at X,Y coordinates
+	int getValue(int x, int y);
 	void display();
 
 private:
 	int grid[9][9];
-
+    const int domain[9] = {1,2,3,4,5,6,7,8,9}; //playable numbers
 
 };
 

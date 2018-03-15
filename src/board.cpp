@@ -1,8 +1,9 @@
+#include "board.h"
+
 #include"board.h"
 #include<iostream>
 
 board::board(){
-
 	grid [0][8] = 2; grid [1][8] = 9; grid [2][8] = 3;
 	grid [0][7] = 5; grid [1][7] = 0; grid [2][7] = 8;
 	grid [0][6] = 0; grid [1][6] = 0; grid [2][6] = 0;
@@ -45,6 +46,14 @@ board::board(){
 
 }
 
+void board::setValue(int x, int y, int value){
+    grid[x][y] = value;
+}
+
+int board::getValue(int x, int y){
+    return grid[x][y];
+}
+
 void board::display(){
 	for (int j = 8; j >= 0; j--){ // for each column
 		for (int i = 0; i < 9; i++){	// for each row
@@ -59,5 +68,4 @@ void board::display(){
 		}
 		std::cout<<"\n";// done printing all the columns, go onto next row
 	}
-
 }
