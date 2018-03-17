@@ -15,20 +15,24 @@ class agent
 {
 public:
     agent();
-    board findSolution(board* gameboard); //given gameBoard, will find a solution
+    board backtrackingSearch(board* gameboard);
+
     void play(int x, int y, int value); //basic play function
     void diplayGameboard();
     void displayPlayDomain();
     std::vector<int> searchPlayable(int x, int y);
 
 private:
-    void searchSub(int x, int y); //searches sub-squares
-    void searchCol(int x); //searches column at given x
-    void searchRow(int y); //searches row at given
+    bool backtrack(); //given gameBoard, will find a solution (using backtracking algorithm)
+    void searchSub(int x, int y); //searches sub-squares and sets playable domain
+    void searchCol(int x); //searches column at given x and sets playable domain
+    void searchRow(int y); //searches row at given and sets playable domain
 
-    void resetPlayDomain();
+    bool checkComplete(); //returns whether the board is full
 
-    bool inPlayDomain(int value);
+    void resetPlayDomain();//resets play domain to domain of the game
+
+    //bool inPlayDomain(int value); // checks if a value exists in play domain.
     void removePlayDomain(int value);
 
     std::vector<int> playDomain;
