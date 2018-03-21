@@ -5,6 +5,14 @@ void move::setMove(int x, int y){
 this->x = x;
 this->y = y;
 }
+ move::move(int x, int y){
+	 this->x = x;
+	 this->y = y;
+ }
+ move::move(const move& setMove){
+	this->x = setMove.x;
+	this->y = setMove.y;
+}
 agent::agent(){
     gameboard = 0;
     resetPlayDomain();
@@ -12,57 +20,78 @@ agent::agent(){
 
 board agent::backtrackingSearch(board* gameboard){
     this->gameboard = gameboard; // initialize gameboard for other functions to use and manipulate
-    return backtrack();
+		backtrack();
+		return *this->gameboard;
 }
+
 bool agent::backtrack(){
+	std::vector<int> playable;
 
-    if(checkComplete()){
-        return *gameboard;
-    }
-    //select cell to change
-    //for each playableDomain
-        //searchPlayable
-        //if playableDomain is not empty
-            //play assignment
-            //result = backtrack
-            //if result != faliure
-                //return result
-        //pop the history stack
-        //return
+	std::cout<<"Starting Backtracking\n";
+	//if board is full
+  if(checkComplete()){
+		std::cout<<"RETURNING COMPLETE\n";
+    	return true;
+  }
+	//else find next unplayed
+	for(int col = 0; col < 9; col++){
+		for(int row = 0; row < 9 ; row ++){
 
-    //
+			//if empty cell
+			if(gameboard->getValue(row,col) == 0){
+			//assign available plays to this local vector
+			playable = searchPlayable(row,col);
+			displayPlayDomain();
+			// if there exists a valid play
+			if(playable.size() != 0){
+				// try playing each value in a backtracking fasion
+				for(int domainPlay = 0; domainPlay < playable.size(); domainPlay++){
+					//NOTE we can sort domain for heuristic to play most restricted <HERE>.
+					play(row,col,playable[domainPlay]);
+					std::cout<<"PLAYING: ("<<playable[domainPlay]<<")\n";
+					gameboard->display();
+					//if move is valid, continue down this path
+					if(backtrack()){return true;}
+						//do not make this move
+					else{unplay();}
+					}//end for domainPlay
+				}//end if playDomainSize is valid
+				return false; //path leads to dead end
+			}
+		}//end for row
+	}//end for column
 
-
-    return *gameboard; //returns the solution
+		std::cout<<"Done?";
+return false;
 }
 
 void agent::play(int x, int y, int value){
     gameboard->setValue(x,y,value); //assign value to given position
-    move currentMove;
-    currentMove.setMove(x,y); //creates a move from this turn with played position
+    move currentMove(x,y); // creates a move with this position
     playHistory.push(currentMove); //records the move in a stack
     return;
 }
 
+void:: agent::unplay(){
+	move tempMove(playHistory.top());
+	playHistory.pop();
+	std::cout<<"unplaying at("<<tempMove.x<<','<<tempMove.y<<")\n";
+	gameboard->setValue(tempMove.x, tempMove.y,0); // unset move on board
+	//tempMove.setMove(playHistory.pop());
+}
+
 std::vector<int> agent::searchPlayable(int x, int y){
     std::cout<<"Searching available plays on ("<<x<<','<<y<<")\n";
-    int subx,suby;
+
+		//set domain to contain 1 through 9
+		resetPlayDomain();
+
+
     //determine sub square coords for searchSub
-    if(x <=3)
-        subx = 0;
-    else if(x <= 6 && x > 3)
-        subx = 1;
-    else if(x <= 9 && x > 6)
-        subx = 2;
-    if(y <=3)
-        suby = 0;
-    else if(y <= 6 && y > 3)
-        subx = 1;
-    else if(y <= 9 && y > 6)
-        subx = 2;
+
 
     //these will search the restrictions and project the restrictions onto a playable domain.
-    searchSub(subx,suby); // search sub square
+    searchSub(x,y); // search sub square
     searchRow(y); //search row at given y
     searchCol(x); //search col at given x
     return playDomain;
@@ -70,9 +99,23 @@ std::vector<int> agent::searchPlayable(int x, int y){
 
 //searches sub square (shown in board.h) and restricts playable domain
 void agent::searchSub(int x, int y){
+	int subx,suby;
+	if(x < 3)
+			subx = 0;
+	else if(x >= 3 && x < 6)
+			subx = 1;
+	else if(x >= 6 && x < 9)
+			subx = 2;
+
+		if(y < 3)
+				suby = 0;
+		else if(y >= 3 && y < 6)
+				suby = 1;
+		else if(y >= 6 && y < 9)
+				suby = 2;
     int tempVal;
-    for(int startX = x*3; startX < x*3+3; startX++){
-        for(int startY = y*3; startY < y*3+3; startY++){
+    for(int startX = subx*3; startX < subx*3+3; startX++){
+        for(int startY = suby*3; startY < suby*3+3; startY++){
             tempVal = gameboard->getValue(startX,startY);
             removePlayDomain(tempVal);
         }
@@ -117,11 +160,12 @@ gameboard->display();
 
 //prints the playDomain in a set notation
 void agent::displayPlayDomain(){
-    std::cout<<'{';
+
+    std::cout<<"Playable Domain: {";
     for(unsigned int i = 0; i < playDomain.size(); i++){
         std::cout<<playDomain[i];
     }
-std::cout<<'}';
+std::cout<<"}\n";
 }
 
 //resets play domain to {1,2,...,9}
@@ -160,3 +204,22 @@ void agent::removePlayDomain(int value){
     }//end for
 }
 
+move agent::findMostConstrained(){
+	int bestValue = 9;
+	std::vector<int> tempDomain;
+	move bestMove(0,0);
+	for (int row = 0; row < 9; row++){
+		for (int col = 0; col < 9; col ++){
+			//if it's an empty cell
+			if(gameboard->getValue(row,col) == 0){
+				//check it's playable domain
+				tempDomain = searchPlayable(row,col);
+				if(tempDomain.size() < bestValue){
+					bestMove.setMove(col,row);
+				}
+			}
+		}
+	}
+	std::cout<<"BestMove is"<<bestMove.x<<','<<bestMove.y<<"\n";
+	return bestMove;
+}

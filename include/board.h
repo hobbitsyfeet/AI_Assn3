@@ -25,13 +25,14 @@ class board{
 public:
 
 	board();
+	board( board& setBoard);
 	void setValue(int x, int y, int value); //places value at X,Y coordinates
 	int getValue(int x, int y);
 	void display();
 
 private:
 	int grid[9][9];
-    const int domain[9] = {1,2,3,4,5,6,7,8,9}; //playable numbers
+    //const int domain[9] = {1,2,3,4,5,6,7,8,9}; //playable numbers
 
 };
 

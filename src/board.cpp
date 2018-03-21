@@ -46,6 +46,14 @@ board::board(){
 
 }
 
+board::board( board& setBoard){
+	for (int col = 0; col < 9; col++ ){
+		for ( int row = 0; row < 9; row ++){
+			this->grid[row][col] = setBoard.getValue(row,col);
+		}
+	}
+}
+
 void board::setValue(int x, int y, int value){
     grid[x][y] = value;
 }

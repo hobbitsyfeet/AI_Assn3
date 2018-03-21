@@ -6,7 +6,10 @@
 #include<vector>
 
 struct move{
+		move(int x, int y);
+		move(const move& setMove);
     void setMove(int x, int y);
+
     int x;
     int y;
 };
@@ -18,6 +21,7 @@ public:
     board backtrackingSearch(board* gameboard);
 
     void play(int x, int y, int value); //basic play function
+		void unplay();
     void diplayGameboard();
     void displayPlayDomain();
     std::vector<int> searchPlayable(int x, int y);
@@ -34,6 +38,8 @@ private:
 
     //bool inPlayDomain(int value); // checks if a value exists in play domain.
     void removePlayDomain(int value);
+
+		move findMostConstrained();
 
     std::vector<int> playDomain;
     std::stack<move> playHistory;

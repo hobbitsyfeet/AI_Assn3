@@ -8,12 +8,9 @@ int main()
 {
     board Seduko;
     agent solver;
-    solver.backtrackingSearch(&Seduko);
-    solver.diplayGameboard();
-    solver.displayPlayDomain();
-    //std::cout<<'\n'<<Seduko.getValue(0,1);
-    std::cout<<"\n";
-    solver.searchPlayable(0,0);
-    solver.displayPlayDomain();
+		
+		solver.backtrackingSearch(&Seduko);
+		solver.diplayGameboard();
+
     return 0;
 }
