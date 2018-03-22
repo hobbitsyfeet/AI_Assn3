@@ -3,6 +3,7 @@
 #include"board.h"
 #include<iostream>
 
+//base initialization of sampled board
 board::board(){
 	grid [0][8] = 2; grid [1][8] = 9; grid [2][8] = 3;
 	grid [0][7] = 5; grid [1][7] = 0; grid [2][7] = 8;
@@ -46,6 +47,7 @@ board::board(){
 
 }
 
+//copies another board
 board::board( board& setBoard){
 	for (int col = 0; col < 9; col++ ){
 		for ( int row = 0; row < 9; row ++){
@@ -54,14 +56,17 @@ board::board( board& setBoard){
 	}
 }
 
+//sets a value at given coordinates
 void board::setValue(int x, int y, int value){
     grid[x][y] = value;
 }
 
+//retreives a value at given coordinates
 int board::getValue(int x, int y){
     return grid[x][y];
 }
 
+//displays the board
 void board::display(){
 	for (int j = 8; j >= 0; j--){ // for each column
 		for (int i = 0; i < 9; i++){	// for each row

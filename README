@@ -1,0 +1,24 @@
+Suduko Solver using backtracking method.
+
+Written by Justin Petluk
+ID# 001190085
+Date: March 22, 2018
+
+Execution:
+make
+make run (Compiles and Executes)
+make clean (Deletes executables)
+
+Creates Executable: Suduko
+
+Description:
+This program uses a pre-defined Suduko puzzle and uses a backtracking algorithm to solve it.
+At this time, there are no heuristics used to solve the problem.
+
+The agent takes in a pointer to the puzzle and can do a variety of things such as solve
+the puzzle, show the puzzle (display), make changes to the puzzle (play and unplay) along with
+figure out what it can play in the cell.
+
+The board builds it's puzzle in the constructor. There is no random generation
+and the puzzle is only predefined. The board contains the structure which holds the values
+and can set and return values with a given coordinate (x,y).

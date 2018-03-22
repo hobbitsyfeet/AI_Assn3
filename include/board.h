@@ -24,15 +24,14 @@ This creates a nice 3*index to get to 0,0 of sub square (bottom left)
 class board{
 public:
 
-	board();
-	board( board& setBoard);
+	board(); //constructor
+	board( board& setBoard); //copy constructor
 	void setValue(int x, int y, int value); //places value at X,Y coordinates
-	int getValue(int x, int y);
+	int getValue(int x, int y);//returns value inside of specified x,y
 	void display();
 
 private:
-	int grid[9][9];
-    //const int domain[9] = {1,2,3,4,5,6,7,8,9}; //playable numbers
+	int grid[9][9]; // the 2D array structure for suduko board
 
 };
 
